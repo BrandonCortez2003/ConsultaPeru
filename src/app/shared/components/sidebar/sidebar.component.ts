@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { HistorialConsultaService } from '../../../services/historial-consulta.service';
 import { ApiDniService } from '../../../services/api-dni.service';
+import { HistorialItem } from '../../../interfaces/historial-item.interface';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,24 +13,33 @@ import { ApiDniService } from '../../../services/api-dni.service';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent implements OnInit {
-  searchHistory: string[] = [];
+ searchHistory: HistorialItem[] = [];
   searchQuery: string = '';
 
   constructor(private historialService: HistorialConsultaService, private apiDniService: ApiDniService) {}
 
+
+  
+
   ngOnInit(): void {
-    this.historialService.historyUpdated.subscribe((history: string[]) => {
+
+    this.historialService.historyUpdated.subscribe((history: HistorialItem[]) => {
       this.searchHistory = history;
     });
+
     this.searchHistory = this.historialService.getSearchHistory();
   }
 
-  manejarHistorialClick(query: string) {
-    this.searchQuery = query; // Actualizar el campo de búsqueda
-    this.historialService.selectFromHistory(query); // Emitir evento para DNIComponent
-  }
+  manejarHistorialClick(item: any) {
+  this.searchQuery = item.dni;       // Esto llena el input del DNI
+  //this.historialService.selectFromHistory(item); 
+}
 
   limpiarHistorial() {
     this.historialService.clearSearchHistory();
   }
+
+  exportarHistorial() {
+  this.historialService.exportarHistorialExcel();
+}
 }

@@ -25,24 +25,28 @@ export default class DNIComponent {
   });
 }
 
-  buscarPorDni(dni: string) {
-    if (dni.trim() === '') return;
+buscarPorDni(dni: string) {
+  if (dni.trim() === '') return;
 
-    this.apiDniService.buscarPorDni(dni).subscribe(
-      (response) => {
-        console.log(response);
-        if (response.success) {
-          this.dniData = response.data;
-          this.historialService.addToSearchHistory(dni); // Agregar consulta al historial
-        } else {
-          console.error('Error en la respuesta:', response.message);
-        }
-      },
-      (error) => {
-        console.error('Error al buscar información por DNI:', error);
+  this.apiDniService.buscarPorDni(dni).subscribe(
+    (response) => {
+      console.log(response);
+      
+      if (response.success) {
+        this.dniData = response.data;
+
+        const nombreCompleto = `${response.data.nombres} ${response.data.apellido_paterno} ${response.data.apellido_materno}`;
+
+
+        this.historialService.addToSearchHistory(dni, nombreCompleto);
+      } else {
+        console.error('Error en la respuesta:', response.message);
       }
-    );
-    
-  }
+    },
+    (error) => {
+      console.error('Error al buscar información por DNI:', error);
+    }
+  );
+}
 
 }

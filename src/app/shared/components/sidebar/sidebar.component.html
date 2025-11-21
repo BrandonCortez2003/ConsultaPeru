@@ -24,9 +24,16 @@
   <div class="m-4">
     <ul class="flex flex-col gap-3">
       <li *ngFor="let search of searchHistory">
-        <button style="text-align: left;" (click)="manejarHistorialClick(search)" class="text-sm p py-3 px-9 w-full text-white bg-gray-700 hover:bg-gray-600 active:bg-gray-800 rounded-lg transition-all">
-          {{ search }}
-        </button>
+        <button 
+  style="text-align: left;" 
+  (click)="manejarHistorialClick(search)" 
+  class="text-sm py-3 px-9 w-full text-white bg-gray-700 hover:bg-gray-600 active:bg-gray-800 rounded-lg transition-all">
+
+  DNI: {{ search.dni }} <br>
+  Nombre: {{ search.nombre }} <br>
+  <span style="font-size: 11px; opacity: 0.7;">{{ search.fecha }}</span>
+
+</button>
       </li>
     </ul>
   </div>
@@ -34,5 +41,8 @@
     <button (click)="limpiarHistorial()" class="text-sm py-3 px-9 w-full text-white bg-purple-600 hover:bg-red-500 active:bg-red-700 rounded-lg transition-all">
       Limpiar Historial
     </button>
+    <button (click)="exportarHistorial()" class="text-sm py-3 px-9 w-full text-white bg-green-600 hover:bg-green-500 active:bg-green-700 rounded-lg transition-all">
+  Exportar Historial (TXT)
+</button>
   </div>
 </aside>
