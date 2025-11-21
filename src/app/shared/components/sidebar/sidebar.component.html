@@ -21,19 +21,26 @@
     </button>
   </div>
   
-  <div class="m-4 max-h-[60vh] overflow-y-auto pr-2">
+<div class="m-4 max-h-[60vh] overflow-y-auto pr-2">
   <ul class="flex flex-col gap-3">
-    <li *ngFor="let search of searchHistory">
-      <button 
-        style="text-align: left;" 
-        (click)="manejarHistorialClick(search)" 
-        class="text-sm py-3 px-9 w-full text-white bg-gray-700 hover:bg-gray-600 active:bg-gray-800 rounded-lg transition-all">
+    <li *ngFor="let search of searchHistory; let i = index">
+      <div class="flex items-center justify-between bg-gray-700 hover:bg-gray-600 active:bg-gray-800 rounded-lg transition-all px-4 py-3">
 
-        DNI: {{ search.dni }} <br>
-        Nombre: {{ search.nombre }} <br>
-        <span style="font-size: 11px; opacity: 0.7;">{{ search.fecha }}</span>
+        <!-- Texto clickeable -->
+        <div class="w-full cursor-pointer" (click)="manejarHistorialClick(search)">
+          DNI: {{ search.dni }} <br>
+          Nombre: {{ search.nombre }} <br>
+          <span style="font-size: 11px; opacity: 0.7;">{{ search.fecha }}</span>
+        </div>
 
-      </button>
+        <!-- Botón Eliminar -->
+        <button 
+          (click)="eliminarItemHistorial(i); $event.stopPropagation();" 
+          class="text-red-400 hover:text-red-600 ml-3 text-xl font-bold">
+          ×
+        </button>
+
+      </div>
     </li>
   </ul>
 </div>

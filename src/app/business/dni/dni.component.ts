@@ -24,19 +24,34 @@ export default class DNIComponent {
     this.buscarPorDni(query); // Realizar búsqueda cuando se selecciona del historial
   });
 }
-
 buscarPorDni(dni: string) {
-  if (dni.trim() === '') return;
+  dni = dni.trim(); // Evita errores con espacios
 
+  if (dni === '') return;
+
+  const existe = this.historialService.existeEnHistorial(dni);
+
+  if (existe) {
+    console.log("DNI encontrado en historial. No se llamará al API.");
+
+    this.dniData = {
+      nombres: existe.nombres ?? '',
+      apellido_paterno: existe.apellido_paterno ?? '',
+      apellido_materno: existe.apellido_materno ?? '',
+      nombre_completo: existe.nombre,
+      numero: existe.dni
+    };
+
+    return;
+  }
+
+  // Si NO está → llamar al API
   this.apiDniService.buscarPorDni(dni).subscribe(
     (response) => {
-      console.log(response);
-      
       if (response.success) {
         this.dniData = response.data;
 
         const nombreCompleto = `${response.data.nombres} ${response.data.apellido_paterno} ${response.data.apellido_materno}`;
-
 
         this.historialService.addToSearchHistory(dni, nombreCompleto);
       } else {

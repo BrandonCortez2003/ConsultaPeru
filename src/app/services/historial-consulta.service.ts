@@ -166,4 +166,15 @@ exportWord(): void {
   });
 }
 
+eliminarItemHistorial(index: number) {
+  const historial = this.getSearchHistory(); // obtenemos desde localStorage
+  historial.splice(index, 1); // eliminamos solo ese item
+  localStorage.setItem('searchHistory', JSON.stringify(historial));
+}
+
+existeEnHistorial(dni: string): any | null {
+  dni = dni.trim();
+  const historial = this.getSearchHistory();
+  return historial.find(item => item.dni === dni) || null;
+}
 }

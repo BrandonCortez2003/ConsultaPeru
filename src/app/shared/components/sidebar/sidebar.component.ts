@@ -35,6 +35,11 @@ export class SidebarComponent implements OnInit {
   //this.historialService.selectFromHistory(item); 
 }
 
+eliminarItemHistorial(index: number) {
+  this.historialService.eliminarItemHistorial(index);
+  this.searchHistory = this.historialService.getSearchHistory(); // refrescar vista
+}
+
   limpiarHistorial() {
     this.historialService.clearSearchHistory();
   }
