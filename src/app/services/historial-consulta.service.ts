@@ -1,4 +1,11 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import * as XLSX from 'xlsx';
+//import { saveAs } from 'file-saver';
+//import { Document, Packer, Paragraph, TextRun } from "docx";
+import { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell } 
+  from "docx";
+
+import { saveAs } from "file-saver";
 
 @Injectable({
   providedIn: 'root'
@@ -79,36 +86,84 @@ exportarHistorialExcel() {
     return;
   }
 
-  // Agregamos estilos CSS para que Excel muestre las celdas correctamente
-  let tabla = `
-    <table border="1" style="border-collapse: collapse;">
-      <tr style="font-weight: bold; background: #f0f0f0;">
-        <th style="padding: 5px; border: 1px solid #000;">DNI</th>
-        <th style="padding: 5px; border: 1px solid #000;">Nombre</th>
-        <th style="padding: 5px; border: 1px solid #000;">Fecha</th>
-      </tr>
-  `;
+  // Convertir los datos a una hoja
+  const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(historial);
 
-  historial.forEach((item: any) => {
-    tabla += `
-      <tr>
-        <td style="padding: 5px; border: 1px solid #000;">${item.dni}</td>
-        <td style="padding: 5px; border: 1px solid #000;">${item.nombre}</td>
-        <td style="padding: 5px; border: 1px solid #000;">${item.fecha}</td>
-      </tr>
-    `;
+  // Crear el libro
+  const workbook: XLSX.WorkBook = {
+    Sheets: { 'Historial': worksheet },
+    SheetNames: ['Historial']
+  };
+
+  // Generar el archivo XLSX
+  const excelBuffer: any = XLSX.write(workbook, {
+    bookType: 'xlsx',
+    type: 'array'
   });
 
-  tabla += `</table>`;
+  // Guardar archivo
+  const blob = new Blob([excelBuffer], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  });
 
-  const blob = new Blob([tabla], { type: "application/vnd.ms-excel" });
-  const url = window.URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "historial_consultas.xls";
-  link.click();
-
-  window.URL.revokeObjectURL(url);
+  saveAs(blob, 'historial_consultas.xlsx');
 }
+
+exportWord(): void {
+  const historial = this.getSearchHistory();
+
+  if (!historial || historial.length === 0) {
+    alert("No hay historial para exportar");
+    return;
+  }
+
+  // Crear filas de la tabla (primero encabezados)
+  const tableRows = [
+    new TableRow({
+      children: [
+        new TableCell({ children: [new Paragraph("DNI")] }),
+        new TableCell({ children: [new Paragraph("Nombre")] }),
+        new TableCell({ children: [new Paragraph("Fecha")] }),
+      ],
+    }),
+    ...historial.map((item: any) =>
+      new TableRow({
+        children: [
+          new TableCell({ children: [new Paragraph(item.dni)] }),
+          new TableCell({ children: [new Paragraph(item.nombre)] }),
+          new TableCell({ children: [new Paragraph(item.fecha)] }),
+        ],
+      })
+    ),
+  ];
+
+  // Documento Word
+  const doc = new Document({
+    sections: [
+      {
+        children: [
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: "Historial de Consultas",
+                bold: true,
+                size: 32,
+              }),
+            ],
+          }),
+          new Paragraph(" "), // espacio
+          new Table({
+            rows: tableRows,
+          }),
+        ],
+      },
+    ],
+  });
+
+  // Exportar a archivo .docx
+  Packer.toBlob(doc).then((blob: Blob) => {
+    saveAs(blob, "historial_consultas.docx");
+  });
+}
+
 }

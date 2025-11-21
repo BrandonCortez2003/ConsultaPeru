@@ -21,28 +21,34 @@
     </button>
   </div>
   
-  <div class="m-4">
-    <ul class="flex flex-col gap-3">
-      <li *ngFor="let search of searchHistory">
-        <button 
-  style="text-align: left;" 
-  (click)="manejarHistorialClick(search)" 
-  class="text-sm py-3 px-9 w-full text-white bg-gray-700 hover:bg-gray-600 active:bg-gray-800 rounded-lg transition-all">
+  <div class="m-4 max-h-[60vh] overflow-y-auto pr-2">
+  <ul class="flex flex-col gap-3">
+    <li *ngFor="let search of searchHistory">
+      <button 
+        style="text-align: left;" 
+        (click)="manejarHistorialClick(search)" 
+        class="text-sm py-3 px-9 w-full text-white bg-gray-700 hover:bg-gray-600 active:bg-gray-800 rounded-lg transition-all">
 
-  DNI: {{ search.dni }} <br>
-  Nombre: {{ search.nombre }} <br>
-  <span style="font-size: 11px; opacity: 0.7;">{{ search.fecha }}</span>
+        DNI: {{ search.dni }} <br>
+        Nombre: {{ search.nombre }} <br>
+        <span style="font-size: 11px; opacity: 0.7;">{{ search.fecha }}</span>
 
-</button>
-      </li>
-    </ul>
-  </div>
+      </button>
+    </li>
+  </ul>
+</div>
   <div class="m-4">
     <button (click)="limpiarHistorial()" class="text-sm py-3 px-9 w-full text-white bg-purple-600 hover:bg-red-500 active:bg-red-700 rounded-lg transition-all">
       Limpiar Historial
     </button>
-    <button (click)="exportarHistorial()" class="text-sm py-3 px-9 w-full text-white bg-green-600 hover:bg-green-500 active:bg-green-700 rounded-lg transition-all">
+    <button (click)="exportarHistorialTxt()" class="text-sm py-3 px-9 w-full text-white bg-red-700 hover:bg-green-500 active:bg-green-700 rounded-lg transition-all">
   Exportar Historial (TXT)
+</button>
+<button (click)="exportarHistorialExcel()" class="text-sm py-3 px-9 w-full text-white bg-green-600 hover:bg-green-500 active:bg-green-700 rounded-lg transition-all">
+  Exportar Historial (EXCEL)
+</button>
+<button (click)="exportarHistorialWord()" class="text-sm py-3 px-9 w-full text-white bg-green-600 hover:bg-green-500 active:bg-green-700 rounded-lg transition-all">
+  Exportar Historial (WORD)
 </button>
   </div>
 </aside>

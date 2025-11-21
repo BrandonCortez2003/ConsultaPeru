@@ -39,7 +39,13 @@ export class SidebarComponent implements OnInit {
     this.historialService.clearSearchHistory();
   }
 
-  exportarHistorial() {
+  exportarHistorialTxt() {
+  this.historialService.exportarHistorialTxt();
+}
+ exportarHistorialExcel() {
   this.historialService.exportarHistorialExcel();
+}
+ exportarHistorialWord() {
+  this.historialService.exportWord();
 }
 }
