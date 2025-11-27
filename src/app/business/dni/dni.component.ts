@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HistorialConsultaService } from '../../services/historial-consulta.service';
 import { SidebarComponent } from '../../shared/components/sidebar/sidebar.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dni',
@@ -31,19 +32,25 @@ buscarPorDni(dni: string) {
 
   const existe = this.historialService.existeEnHistorial(dni);
 
-  if (existe) {
-    console.log("DNI encontrado en historial. No se llamará al API.");
+if (existe) {
+   Swal.fire({
+    title: 'DNI YA CONSULTADO',
+    text: `El DNI ${dni} ya existe en tu historial.`,
+    icon: 'warning',
+    confirmButtonText: 'Ok, gracias',
+    confirmButtonColor: '#19446dff'
+  });
 
-    this.dniData = {
-      nombres: existe.nombres ?? '',
-      apellido_paterno: existe.apellido_paterno ?? '',
-      apellido_materno: existe.apellido_materno ?? '',
-      nombre_completo: existe.nombre,
-      numero: existe.dni
-    };
+  this.dniData = {
+    nombres: existe.nombres ?? '',
+    apellido_paterno: existe.apellido_paterno ?? '',
+    apellido_materno: existe.apellido_materno ?? '',
+    nombre_completo: existe.nombre,
+    numero: existe.dni
+  };
 
-    return;
-  }
+  return;
+}
 
   // Si NO está → llamar al API
   this.apiDniService.buscarPorDni(dni).subscribe(
