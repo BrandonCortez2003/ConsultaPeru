@@ -58,7 +58,7 @@ if (existe) {
       if (response.success) {
         this.dniData = response.data;
 
-        const nombreCompleto = `${response.data.nombres} ${response.data.apellido_paterno} ${response.data.apellido_materno}`;
+        const nombreCompleto = `${response.data.apellido_paterno} ${response.data.apellido_materno} ${response.data.nombres}`;
 
         this.historialService.addToSearchHistory(dni, nombreCompleto);
       } else {
