@@ -38,7 +38,7 @@ addToSearchHistory(dni: string, nombreCompleto: string) {
     fecha: new Date().toLocaleString()
   };
 
-  this.searchHistory.push(item);
+  this.searchHistory.unshift(item)
   localStorage.setItem('searchHistory', JSON.stringify(this.searchHistory));
   this.historyUpdated.emit(this.searchHistory);
 }
